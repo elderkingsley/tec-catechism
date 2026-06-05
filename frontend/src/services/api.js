@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for Laravel API
-const API_BASE_URL = 'https://api.catechism.thisexcellentchurch.org/api';
+const API_BASE_URL = '/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -58,9 +58,6 @@ export default api;
 
 // Auth API calls
 export const authAPI = {
-  // Register new user
-  register: (userData) => api.post('/register', userData),
-  
   // Login user
   login: (credentials) => api.post('/login', credentials),
   

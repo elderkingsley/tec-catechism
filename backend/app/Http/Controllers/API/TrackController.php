@@ -30,9 +30,12 @@ class TrackController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Get all tracks with uploader info, ordered by newest first
+        // Get all tracks with uploader info, ordered by lesson number.
         $tracks = Track::with('uploader:id,name')
-            ->orderBy('created_at', 'desc')
+            ->orderByRaw("CAST(REGEXP_SUBSTR(title, '[0-9]+') AS UNSIGNED) IS NULL")
+            ->orderByRaw("CAST(REGEXP_SUBSTR(title, '[0-9]+') AS UNSIGNED)")
+            ->orderBy('title')
+            ->orderBy('id')
             ->get();
 
         return response()->json($tracks);

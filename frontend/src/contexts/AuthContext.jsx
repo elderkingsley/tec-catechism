@@ -52,27 +52,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const register = async (name, email, password, passwordConfirmation) => {
-    try {
-      const response = await authAPI.register({
-        name,
-        email,
-        password,
-        password_confirmation: passwordConfirmation,
-      });
-      
-      // Save token and user
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      setUser(response.data.user);
-      
-      return { success: true };
-    } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed';
-      return { success: false, error: message };
-    }
-  };
-
   const logout = async () => {
     try {
       await authAPI.logout();
@@ -89,7 +68,6 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     login,
-    register,
     logout,
     loading,
     isAuthenticated: !!user,

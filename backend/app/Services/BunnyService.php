@@ -19,10 +19,10 @@ class BunnyService
      */
     public function __construct()
     {
-        $this->storageZoneName = config('services.bunny.storage_zone_name', '');
-        $this->apiKey = config('services.bunny.api_key', '');
-        $this->hostname = config('services.bunny.hostname', '');
-        $this->region = config('services.bunny.region', 'de');
+        $this->storageZoneName = config('services.bunny.storage_zone_name') ?? '';
+        $this->apiKey = config('services.bunny.api_key') ?? '';
+        $this->hostname = config('services.bunny.hostname') ?? '';
+        $this->region = config('services.bunny.region') ?? 'de';
     }
 
     /**
@@ -63,7 +63,7 @@ class BunnyService
             
             if ($statusCode >= 200 && $statusCode < 300) {
                 // Build the public CDN URL
-                $cdnUrl = "https://{$this->hostname}/{$path}";
+                $cdnUrl = $this->getCdnUrl($path);
 
                 return [
                     'success' => true,
@@ -122,7 +122,9 @@ class BunnyService
      */
     public function getCdnUrl(string $path): string
     {
-        return "https://{$this->hostname}/{$path}";
+        $encodedPath = implode('/', array_map('rawurlencode', explode('/', $path)));
+
+        return "https://{$this->hostname}/{$encodedPath}";
     }
 
     /**

@@ -16,7 +16,6 @@ use App\Http\Controllers\API\TrackController;
 */
 
 // Public routes (no authentication required)
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/tracks', [TrackController::class, 'index']);
 

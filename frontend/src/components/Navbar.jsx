@@ -83,20 +83,12 @@ function Navbar() {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link 
-                    to="/login" 
-                    className="hover:text-blue-200 transition font-medium"
-                  >
-                    Login
-                  </Link>
-                  <Link 
-                    to="/register" 
-                    className="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition font-medium"
-                  >
-                    Register
-                  </Link>
-                </>
+                <Link 
+                  to="/login" 
+                  className="hover:text-blue-200 transition font-medium"
+                >
+                  Login
+                </Link>
               )}
             </div>
 
@@ -193,25 +185,13 @@ function Navbar() {
                   </div>
                 </>
               ) : (
-                <>
-                  {/* Login Link */}
-                  <Link
-                    to="/login"
-                    onClick={closeMenu}
-                    className="block mx-6 mt-4 text-center bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-medium"
-                  >
-                    Login
-                  </Link>
-
-                  {/* Register Link */}
-                  <Link
-                    to="/register"
-                    onClick={closeMenu}
-                    className="block mx-6 mt-3 text-center bg-white text-blue-600 border-2 border-blue-600 px-4 py-3 rounded-lg hover:bg-blue-50 transition font-medium"
-                  >
-                    Register
-                  </Link>
-                </>
+                <Link
+                  to="/login"
+                  onClick={closeMenu}
+                  className="block mx-6 mt-4 text-center bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+                >
+                  Login
+                </Link>
               )}
             </nav>
           </div>

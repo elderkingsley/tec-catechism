@@ -1,0 +1,56 @@
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy over SSH
+        env:
+          PROD_HOST: ${{ secrets.PROD_HOST }}
+          PROD_USER: ${{ secrets.PROD_USER }}
+          PROD_SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+          PROD_PATH: ${{ secrets.PROD_PATH }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PROD_HOST}" ] || [ -z "${PROD_USER}" ] || [ -z "${PROD_SSH_KEY}" ] || [ -z "${PROD_PATH}" ]; then
+            echo "Missing one or more required secrets: PROD_HOST, PROD_USER, PROD_SSH_KEY, PROD_PATH"
+            exit 1
+          fi
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${PROD_SSH_KEY}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${PROD_HOST}" >> ~/.ssh/known_hosts
+
+          ssh -i ~/.ssh/deploy_key "${PROD_USER}@${PROD_HOST}" "PROD_PATH='${PROD_PATH}' bash -s" <<'EOF'
+          set -euo pipefail
+
+          cd "${PROD_PATH}"
+
+          git fetch origin main
+          git reset --hard origin/main
+
+          cd backend
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:cache
+          php artisan route:cache
+
+          cd ../frontend
+          npm ci
+          npm run build
+          EOF

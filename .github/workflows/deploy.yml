@@ -45,7 +45,10 @@ jobs:
           git reset --hard origin/main
 
           cd backend
-          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          composer install --no-dev --prefer-dist --no-interaction --no-scripts
+          composer dump-autoload --optimize --no-dev --no-interaction --no-scripts
+          php artisan package:discover --ansi
+          php artisan optimize:clear
           php artisan migrate --force
           php artisan config:cache
           php artisan route:cache

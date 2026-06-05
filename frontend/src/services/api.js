@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for Laravel API
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Create axios instance with default config
 const api = axios.create({

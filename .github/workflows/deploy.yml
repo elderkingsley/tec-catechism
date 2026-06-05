@@ -55,6 +55,7 @@ jobs:
           php artisan route:cache
 
           cd ../frontend
+          printf 'VITE_API_BASE_URL=https://api.catechism.thisexcellentchurch.org/api\n' > .env.production
           npm ci
           npm run build
           EOF
